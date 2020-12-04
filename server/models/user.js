@@ -45,25 +45,25 @@ userSchema.virtual('password')
         return this._password
     })
 
-// Methods
-
+// methods
 userSchema.methods = {
-    authenticated: function (plaintext) {
-        return this.encryptPassword(plaintext) === this.hashed_password;
+    authenticate: function(plainText) {
+        return this.encryptPassword(plainText) === this.hashed_password;
     },
 
-    encryptPassword: function (password) {
-        if (!password) return ''
+    encryptPassword: function(password) {
+        if (!password) return '';
         try {
-            return crypto.createHmac('sha1', this.salt)
+            return crypto
+                .createHmac('sha1', this.salt)
                 .update(password)
-                .digest('hex')
-        } catch (error) {
+                .digest('hex');
+        } catch (err) {
             return '';
         }
     },
 
-    makeSalt: function () {
+    makeSalt: function() {
         return Math.round(new Date().valueOf() * Math.random()) + '';
     }
 }

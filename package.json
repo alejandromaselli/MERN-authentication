@@ -1,0 +1,20 @@
+{
+  "name": "packt-bpu-MERN-authentication",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "install": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/alejandromaselli/MERN-authentication.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/alejandromaselli/MERN-authentication/issues"
+  },
+  "homepage": "https://github.com/alejandromaselli/MERN-authentication#readme"
+}
