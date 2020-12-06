@@ -152,3 +152,70 @@ exports.requireSignin = expressJwt({
     secret: process.env.JWT_SECRET, // req.user_id
     algorithms: ['HS256']
 });
+
+exports.adminMiddleware = (req, res, next) => {
+    console.log(req);
+    User.findById({ _id: req.user._id }).exec((err, user) => {
+        if (err || !user) {
+            console.log('ADMIN MIDDLEWARE ERROR ', err);
+            return res.status(400).json({
+                error: 'User not found'
+            });
+        }
+
+        if (user.role !== 'admin') {
+            return res.status(400).json({
+                error: 'Admin resource denied'
+            });
+        }
+        req.profile = user;
+        next();
+    })
+};
+
+exports.forgotPassword = (req, res) => {
+    const { email, name } = req.body;
+
+    User.findOne({ email }, (err, user) => {
+        console.log('USER PLGP',user);
+        if (err || !user) {
+            return res.status(400).json({
+                error: 'User does not exist'
+            });
+        }
+        
+        const token = jwt.sign({ _id: user._id }, process.env.JWT_RESET_PASSWORD, { expiresIn: '10m' });
+
+        const emailData = {
+            from: process.env.EMAIL_FROM,
+            to: email,
+            subject: `Password reset Link for ${name} account`,
+            html: `
+                <p>Que onda ${name}! que pendejo sos que olvidaste tu contraseña</p>
+                <p>No tengás pena, esta app es a prueba de pendejos!</p>
+                <p>dale en el siguiente link para recuperar tu contraseña!</p>
+                <p>${process.env.CLIENT_URL}/auth/password/reset/${token}</p>
+                <p>Tranquilo no te vamos a hackear (Mucho)</p>
+                <p>${process.env.CLIENT_URL}/auth/activate</p>
+            `
+        }
+
+        sendgrid.send(emailData)
+            .then(sent => {
+                console.log('Signup email sent successfully');
+                return res.json({
+                    message: `Email has been sent to ${email} to reset the password.`
+                })
+            })
+            .catch(err => {
+                console.log('ERROR OF THE EMAIL', err.response.body);
+                return res.json({
+                    message: err
+                })
+            });
+    })
+};
+
+exports.resetPasswordLink = (req, res) => {
+    const {resetPasswordLink, newPassword} = req.body;
+};

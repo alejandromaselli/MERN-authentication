@@ -12,11 +12,10 @@ export const setCookie = (key, value) => {
 //Remove from cookie
 
 export const removeCookie = (key) => {
-    if (window !== 'undefined') {
+    if (window !== 'undefined')
         cookie.remove(key, {
             expires: 1
         })
-    }
 }
 
 // Get from cookie such as stored token. 
@@ -28,16 +27,14 @@ export const getCookie = (key, value) => {
 
 // set in localstorage
 export const setLocalStorage = (key, value) => {
-    if (window !== 'undefined') {
+    if (window !== 'undefined')
         localStorage.setItem(key, JSON.stringify(value))
-    }
 }
 
 // Remove from localstorage
 export const removetLocalStorage = (key) => {
-    if (window !== 'undefined') {
+    if (window !== 'undefined')
         localStorage.removeItem(key)
-    }
 }
 
 // Authenticate user by passing data to cookie and localatorage during signin
@@ -53,7 +50,7 @@ export const isAuth = () => {
     if (window !== 'undefined') {
 
         const cookieChecked = getCookie('token');
-        
+
         if (cookieChecked)
             if (localStorage.getItem('user'))
                 return JSON.parse(localStorage.getItem('user'));
@@ -65,5 +62,15 @@ export const isAuth = () => {
 export const signOut = next => {
     removeCookie('token');
     removetLocalStorage('token');
+    next();
+};
+
+export const updateUser = (response, next) => {
+    console.log('UPDATE USER UN LOCALSTORAGE HELPERS');
+    if (typeof window !== 'undefined') {
+        let auth = JSON.parse(localStorage.getItem('user'));
+        auth = response.data;
+        localStorage.setItem('user', JSON.stringify(auth));
+    }
     next();
 };
