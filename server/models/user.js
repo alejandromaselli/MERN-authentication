@@ -47,11 +47,11 @@ userSchema.virtual('password')
 
 // methods
 userSchema.methods = {
-    authenticate: function(plainText) {
+    authenticate: function (plainText) {
         return this.encryptPassword(plainText) === this.hashed_password;
     },
 
-    encryptPassword: function(password) {
+    encryptPassword: function (password) {
         if (!password) return '';
         try {
             return crypto
@@ -63,7 +63,7 @@ userSchema.methods = {
         }
     },
 
-    makeSalt: function() {
+    makeSalt: function () {
         return Math.round(new Date().valueOf() * Math.random()) + '';
     }
 }

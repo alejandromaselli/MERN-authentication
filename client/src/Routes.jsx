@@ -5,9 +5,11 @@ import App from './App';
 import Signup from './components/auth/Signup';
 import Signin from './components/auth/Signin';
 import Activate from './components/auth/Activate';
+import Private from './components/layout/Private';
+import Admin from './components/layout/Admin';
 
-import newCookie from './components/auth/helpers'
-
+import PrivateRoute from './components/auth/PrivateRoute';
+import AdminRoute from './components/auth/AdminRoute';
 
 const Routes = () => {
     return (
@@ -16,7 +18,9 @@ const Routes = () => {
                 <Route path="/" component={App} exact />
                 <Route path="/signup" component={Signup} exact />
                 <Route path="/signin" component={Signin} exact />
-                <Route path="/auth/activate/:token" component={Activate}   />
+                <Route path="/auth/activate/:token" component={Activate} exact />
+                <PrivateRoute path="/private" component={Private} exact />
+                <AdminRoute path="/admin" component={Admin} />
                 <Redirect to="/" />
             </Switch>
         </BrowserRouter>

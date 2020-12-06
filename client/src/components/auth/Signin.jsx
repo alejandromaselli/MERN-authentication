@@ -4,7 +4,10 @@ import axios from 'axios';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.min.css';
 
-const Signin = () => {
+import { authenticate, isAuth } from './helpers';
+import { Redirect } from 'react-router-dom';
+
+const Signin = ({ history }) => {
     const [values, setValues] = useState({
         email: 'jamaselli51@gmail.com',
         password: '123456',
@@ -33,8 +36,11 @@ const Signin = () => {
 
                 // Save the response (user, token) localstorage & cookie
 
-                setValues({ ...values, name: '', email: '', password: '', buttonText: 'Submitted' });
-                toast.success(`Hey ${response.data.user.name}, Welcome back!`);
+                authenticate(response, () => {
+                    setValues({ ...values, name: '', email: '', password: '', buttonText: 'Submitted' });
+                    // toast.success(`Hey ${response.data.user.name}, Welcome back!`);
+                    isAuth() && isAuth().role === 'admin' ? history.push('/admin') : history.push('/private')
+                })
             })
             .catch(error => {
                 console.log('SIGNUP ERROR', error.response.data);
@@ -67,6 +73,7 @@ const Signin = () => {
         <Layout>
             <div className="col-md-6 offset-md-3">
                 <ToastContainer />
+                {isAuth() ? <Redirect to="/" /> : null}
                 <h1 className="p-5 text-center">Sign In</h1>
                 {signinForm()}
             </div>

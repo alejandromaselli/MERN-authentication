@@ -14,7 +14,7 @@ router.post('/signin', userSigninValidator, runValidation, signin);
 
 router.post('/prueba', (req, res) => {
     console.log(req.body);
-    res.json({lol:"lol"})
+    res.json({ lol: "lol" })
 });
 
 module.exports = router;

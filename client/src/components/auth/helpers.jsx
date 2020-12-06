@@ -51,7 +51,9 @@ export const authenticate = (response, next) => {
 // Access user info from localstorage 
 export const isAuth = () => {
     if (window !== 'undefined') {
-        const cookieChecked = setCookie('token');
+
+        const cookieChecked = getCookie('token');
+        
         if (cookieChecked)
             if (localStorage.getItem('user'))
                 return JSON.parse(localStorage.getItem('user'));
@@ -59,3 +61,9 @@ export const isAuth = () => {
                 return false
     }
 }
+
+export const signOut = next => {
+    removeCookie('token');
+    removetLocalStorage('token');
+    next();
+};
